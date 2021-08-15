@@ -1,25 +1,38 @@
-import logo from './logo.svg';
+import {useEffect, useState} from "react";
+import InputForm from "./components/inputForm/inputForm";
+import Post from "./components/post/Post";
+import axios from "axios";
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [posts, setPosts] = useState([]);
+    const [page, setPage] = useState(1);
+    const [authorInput, setAuthorInput] = useState("");
+    const [textInput, setTextInput] = useState("");
+
+    const changeAuthorInputValue = (value) => {
+        setAuthorInput(value);
+    };
+
+    const changeTextInputValue = (value) => {
+        setTextInput(value);
+    };
+
+    useEffect(() => {
+        let lastDate = '';
+
+    }, [page]);
+
+    return (
+        <div className="container">
+            <div className="inner-container">
+                <InputForm add={() => addPost}/>
+                {posts.map((post, index) => {
+                    return <Post key={index} author={post.author} date={post.date} text={post.data}/>
+                })}
+            </div>
+        </div>
+    );
 }
 
 export default App;
