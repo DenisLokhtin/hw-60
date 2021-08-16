@@ -3,9 +3,21 @@ import './inputForm.css'
 
 const InputForm = (props) => (
     <div className="forms">
-        <input className="authorForm" type="text" placeholder="author"/>
-        <input className="textForm" type="text" placeholder="text"/>
-        <button className="sendBtn">Send</button>
+        <input
+            className="authorForm"
+            type="text"
+            onChange={(e) => props.setAuthor(e.target.value)}
+            defaultValue={props.author}
+            placeholder="author"
+        />
+        <input
+            className="textForm"
+            type="text"
+            onChange={(e) => props.setText(e.target.value)}
+            defaultValue={props.text}
+            placeholder="text"
+        />
+        <button onClick={props.add} className="sendBtn">Send</button>
     </div>
 );
 

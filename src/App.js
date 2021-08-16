@@ -9,28 +9,26 @@ function App() {
     let interval = null
 
     const [posts, setPosts] = useState([]);
-    const [authorInput, setAuthorInput] = useState("");
-    const [textInput, setTextInput] = useState("");
+    const [authorInput, setAuthorInput] = useState('');
+    const [textInput, setTextInput] = useState('');
 
     const changeAuthorInputValue = (value) => {
         setAuthorInput(value);
     };
 
     const changeTextInputValue = (value) => {
+        console.log(value)
         setTextInput(value);
     };
 
     const getData = async () => {
         try {
             let data = null
-            console.log('posts', posts)
             if (posts.length > 0) {
-                console.log('> 0')
                 data = await axios.get(url + '?datetime=' + posts[posts.length - 1]['datetime'])
             } else {
                 data = await axios.get(url)
             }
-            console.log(data)
             if (data.data.length > 0) {
                 setPosts((prev) => {
                     return [...prev].concat(data.data);
@@ -48,24 +46,32 @@ function App() {
         }, 3000);
     }, [posts]);
 
-    console.log('state' + posts[0])
-
+    const addPost = async () => {
+        console.log('click')
+        const data = new URLSearchParams();
+        data.set('message', textInput);
+        data.set('author', authorInput);
+        await axios.post(url, data);
+        setTextInput('')
+    }
 
     return (
         <div className="container">
             <div className="inner-container">
                 <InputForm
-                    setText={() => changeTextInputValue()}
-                    setAuthor={() => changeAuthorInputValue()}
-                    // add={() => addPost()}
+                    setText={(value) => changeTextInputValue(value)}
+                    setAuthor={(value) => changeAuthorInputValue(value)}
+                    add={() => addPost()}
+                    text={textInput}
+                    author={authorInput}
                 />
                 {posts.map((post, index) => {
                     return (
                         <Post
                             key={index}
                             author={post.author}
-                            date={post.date}
-                            text={post.text}
+                            date={post.datetime}
+                            text={post.message}
                         />
                     )
                 })}
